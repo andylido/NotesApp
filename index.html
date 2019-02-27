@@ -76,11 +76,14 @@
 
 
       $(document).ready(function() {
+        
+        //Start-up page display
         $("#home").show();
         function hideScreens() {
           $(".content").hide();
         }
-
+        
+        //List Subjects in List Page
         function loadNotesList() {
           $("#listsub").empty();
           $("#listsub").append("<br>")
@@ -93,29 +96,31 @@
             $("#listsub").append(p);
           });
         }
-          
-          function loadNoteDetail(id) {
-              db.notes.get(id).then(function(note){    
-                  $("#detail").append(note.subject);
-                  $("#detail").append(note.content);
-              });
-          }
-          
-          
-            $("body").on("click", "list-note" , function(){
-                loadNoteDetail($(this).attr("data-id"));
-            });
-
-          
-            $(".nav-link").on("click", function(){
-                hideScreens();
-                var target = $(this).attr("href");
-                $(target).show();
-                if(target == "#list") {
-                    loadNotesList();
-                }
-            });
         
+        //Load Note function
+        function loadNoteDetail(id) {
+          db.notes.get(id).then(function(note){    
+              $("#detail").append(note.subject);
+                $("#detail").append(note.content);
+            });
+        }
+          
+        //  
+        $("body").on("click", "list-note" , function(){
+            loadNoteDetail($(this).attr("data-id"));
+        });
+
+        //Nav bar page switch  
+        $(".nav-link").on("click", function(){
+            hideScreens();
+            var target = $(this).attr("href");
+            $(target).show();
+            if(target == "#list") {
+                loadNotesList();
+            }
+        });
+        
+        //Go back to create notes page  
         $("#back").on("click", function(){
             hideScreens();
             var target = $(this).attr("href");
@@ -126,10 +131,9 @@
         $("#saveNote").on("click", function() {
           var subject = $("#subject").val();
           var content = $("#content").val();
-          
           // loop through notes
           db.notes.put({subject: subject, content: content, date: new Date()});
-          $("#subject").val('');
+          $("#subject").val(''); //clear input box for continous  input
           $("#content").val('');
         });
 
