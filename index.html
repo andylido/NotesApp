@@ -90,9 +90,9 @@
           // loop through notes
           db.notes.each(function(note) {
             var p = $("<p>");
-              p.attr("data-id",note.id);
-              p.addClass("list-note")
-              p.text(note.subject);
+            p.attr("data-id",note.id);
+            p.addClass("list-note")
+            p.text(note.subject);
             $("#listsub").append(p);
           });
         }
@@ -100,7 +100,7 @@
         //Load Note function
         function loadNoteDetail(id) {
           db.notes.get(id).then(function(note){    
-              $("#detail").append(note.subject);
+                $("#detail").append(note.subject);
                 $("#detail").append(note.content);
             });
         }
