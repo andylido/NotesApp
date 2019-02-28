@@ -16,8 +16,8 @@
 
 </head>
 
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+<body style="background-color:lightyellow">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color:burlywood!important">
 		<a class="navbar-brand" href="#home">Quick Notes</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -52,13 +52,16 @@
         </center>
   </div>
     
-  <div class="content" id="list">
-    <a class="btn btn-primary btn-sm" id="back" href="#home">Back</a>
+  <div class="content col-md-8" id="list">
+    <h2 class="section-heading text-uppercase">List of Subjects</h2>
+    <h5>Click on a subject to view note</h5><br><br>
     <div id="listsub"></div>
+    <a class="btn btn-primary btn-sm" id="back" href="#home">Back</a>
   </div>
     
-  <div class="content" id=detail>
-    Detail
+  <div class="content col-md-8" id=detail>
+    <h2 class="section-heading text-uppercase">List of Subjects</h2>  
+    <h5>Click on a note in the List to show here</h5><br><br>
   </div>
 
 
@@ -97,17 +100,23 @@
           });
         }
         
-        //Load Note function
+        //List note details in Detail Page
         function loadNoteDetail(id) {
-          db.notes.get(id).then(function(note){    
+            ids = parseInt(id);
+            db.notes.get(ids).then(function(note){    
                 $("#detail").append(note.subject);
+                $("#detail").append("<br>");
                 $("#detail").append(note.content);
+                $("#detail").append("<br><br>");
             });
         }
           
-        //  
-        $("body").on("click", "list-note" , function(){
+        //Upon clicking on note  
+        $("body").on("click", ".list-note" , function(){
+            $("detail").empty();
             loadNoteDetail($(this).attr("data-id"));
+            hideScreens();
+            $("#detail").show();
         });
 
         //Nav bar page switch  
@@ -127,7 +136,7 @@
             $(target).show();
         });
 
-
+        //SaveNote
         $("#saveNote").on("click", function() {
           var subject = $("#subject").val();
           var content = $("#content").val();
