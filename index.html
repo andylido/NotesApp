@@ -43,9 +43,10 @@
     <h4>This quick and simple application let's you memo something down in a jiff and come back to it later.</h4>
     <p>Instructions:</p>
     <ol>
-      <li>Create a Note</li>
-      <li>View List of all Note Subjects</li>
-      <li>Select a note to view in greater detail</li>
+    <li>Create a note/memo</li>
+      <li>View list of all note subjects</li>
+      <li>Select a subject to view in greater detail</li>
+      <li>Repeat!</li>
     </ol>
   </div>
     
@@ -59,7 +60,7 @@
                 <textarea class="form-control" id="content" placeholder="Note" required="required"></textarea><br>
             </div>
             <div class="col-lg-12 text-center">
-                <button id="saveNote" class="btn btn-primary btn-xl text-uppercase">Submit</button>
+                <button type="submit" id="saveNote" class="btn btn-primary btn-xl text-uppercase">Submit</button>
             </div>
         </center>
   </div>
@@ -74,6 +75,7 @@
   <div class="content col-md-8" id=details>
     <h2 class="section-heading text-uppercase">Note Detail</h2><br>
     <div id=detail></div>
+    <a class="btn btn-sm" id="del" style="background-color: red; color: white">Delete</a><br><br>  
     <a class="btn btn-primary btn-sm" id="backlist" href="#list">Back</a>
   </div>
 
@@ -101,17 +103,17 @@
         
         //List Subjects in List Page
         function loadNotesList() {
-          $("#listsub").empty();
-          $("#listsub").append("<br>")
-          // loop through notes
-          db.notes.each(function(note) {
-            var p = $("<p>");
-            p.attr("data-id",note.id);
-            p.addClass("list-note")
-            p.text(note.subject);
-            $("#listsub").append(p);
-            $("#listsub").append("<br>");  
-          });
+            $("#listsub").empty();
+            $("#listsub").append("<br>")
+            // loop through notes
+            db.notes.each(function(note) {
+                var p = $("<p>");
+                p.attr("data-id",note.id);
+                p.addClass("list-note")
+                p.text(note.subject);
+                $("#listsub").append(p);
+                $("#listsub").append("<br>");
+            });
         }
         
         //List note details in Detail Page
@@ -120,14 +122,22 @@
             db.notes.get(ids).then(function(note){    
                 $("#detail").append(note.subject);
                 $("#detail").append("<br>");
-                $("#detail").append(note.content);
-                $("#detail").append("<br><br>");
+                $("#detail").append(note.content, "<br>", "<br>");
+            });
+            $("#del").on("click", function(){
+                db.notes.delete(ids);
+                $("#detail").empty();
+                hideScreens();
+                var target = $("#backlist").attr("href");
+                loadNotesList();
+                $(target).show();
             });
         }
+         
           
         //Upon clicking on note  
         $("body").on("click", ".list-note" , function(){
-            $("detail").empty();
+            $("#detail").empty();
             loadNoteDetail($(this).attr("data-id"));
             hideScreens();
             $("#details").show();
@@ -154,18 +164,23 @@
         $("#backlist").on("click", function(){
             hideScreens();
             var target = $(this).attr("href");
+            loadNotesList();
             $(target).show();
         });
 
         //SaveNote
         $("#saveNote").on("click", function() {
-          var subject = $("#subject").val();
-          var content = $("#content").val();
-          // loop through notes
-          db.notes.put({subject: subject, content: content, date: new Date()});
-          $("#subject").val(''); //clear input box for continous  input
-          $("#content").val('');
+            var subject = $("#subject").val();
+            var content = $("#content").val();
+            // loop through notes
+            db.notes.put({subject: subject, content: content, date: new Date()});
+            $("#subject").val(''); //clear input box for continous  input
+            $("#content").val('');
+            hideScreens();
+            $("#list").show();
+            loadNotesList();
         });
+          
 
       });
     </script>
