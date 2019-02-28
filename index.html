@@ -17,6 +17,8 @@
 </head>
 
 <body style="background-color:lightyellow">
+    
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color:burlywood!important">
 		<a class="navbar-brand nav-link" href="#about">Quick Notes</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,6 +39,7 @@
         </div>
   </nav>
 
+  <!-- About Page -->
   <div class="content col-md-8" id=about>
     <h1 class="section-heading" style="font: Ariel;">About</h1><br>
     <h3>Welcome to Quick Notes!</h3>
@@ -51,6 +54,7 @@
     </ol>
   </div>
     
+  <!-- Create Note Page -->
   <div class="content" id="home">  
       <h2 class="text-center section-heading text-uppercase">Create Note</h2><br>
         <center>
@@ -61,10 +65,10 @@
               <input type="submit" id="saveNote" class="btn btn-primary btn-xl text-uppercase" value="Submit"/>
             </form>
             </div>
-        </center>
-      
+        </center> 
   </div>
-    
+  
+  <!-- List Note Subject Page -->
   <div class="content col-md-8" id="list">
     <h2 class="section-heading text-uppercase">List of Subjects</h2>
     <h5>Click on a subject to view note</h5>
@@ -72,6 +76,7 @@
     <a class="btn btn-primary btn-sm" id="backnote" href="#home">Back</a>
   </div>
     
+  <!-- List Note Details Page -->
   <div class="content col-md-8" id=details>
     <h2 class="section-heading text-uppercase">Note Detail</h2><br>
     <div id=detail></div>
@@ -79,7 +84,7 @@
     <a class="btn btn-primary btn-sm" id="backlist" href="#list">Back</a>
   </div>
 
-
+  <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
@@ -93,9 +98,7 @@
           notes: "++id,subject"
       });
 
-
       $(document).ready(function() {
-        
         //Start-up page display
         $("#home").show();
         function hideScreens() {
@@ -125,13 +128,11 @@
                 $("#detail").append("<br>");
                 $("#detail").append(note.content, "<br>", "<br>");
             });
-            $("#del").on("click", function(){
+            $("#del").on("click", function(){ //delete a note via id
                 db.notes.delete(ids);
                 $("#detail").empty();
                 hideScreens();
-                var target = $("#backlist").attr("href");
-                loadNotesList();
-                $(target).show();
+                $("#home").show();
             });
         }
          
@@ -178,11 +179,9 @@
             $("#subject").val(''); //clear input box for continous  input
             $("#content").val('');
             hideScreens();
-            $("#list").show();
+            $("#list").show(); //reset to list screen
             loadNotesList();
         });
-          
-
       });
     </script>
 
